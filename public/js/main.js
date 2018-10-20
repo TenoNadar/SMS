@@ -22,3 +22,27 @@ const getTimeSchedule = ({ time, number, text }) => {
     fetchServer({ number, text });
   }, time * 60 * 1000);
 };
+const fetchServer = ({ number, text }) => {
+    console.log('send');
+    fetch('/', {
+      method: 'post',
+      headers: {
+        'Content-type': 'application/json'
+      },
+      body: JSON.stringify({ number, text })
+    })
+      .then(function (res) {
+        console.log(res);
+      })
+      .catch(function (err) {
+        console.log(err);
+      });
+  };
+  
+  function send() {
+    const number = numberInput.value.replace(/\D/g, '');
+    const text = textInput.value;
+    const time = parseInt(scheduleSelect.value, 10);
+    getTimeSchedule({ number, text, time });
+  }
+  
