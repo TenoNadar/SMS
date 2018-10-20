@@ -33,4 +33,26 @@ app.post('/', (req, res) => {
     // res.send(req.body);
     // console.log(req.body);
     const { number, text } = req.body;
-  
+    nexmo.message.sendSms(
+        'YOURVURTUALNUMBER', number, text, { type: 'unicode' },
+        (err, responseData) => {
+          if(err) {
+            console.log(err);
+          } else {
+            const { messages } = responseData;
+            const { ['message-id']: id, ['to']: number, ['error-text']: error  } = messages[0];
+            console.dir(responseData);
+            // Get data from response
+            const data = {
+              id,
+              number,
+              error
+            };
+    
+            // Emit to the client
+            io.emit('smsStatus', data);
+          }
+        }
+      );
+    });
+      
